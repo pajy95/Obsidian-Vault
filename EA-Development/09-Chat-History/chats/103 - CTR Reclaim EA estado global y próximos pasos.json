@@ -1,0 +1,168 @@
+{
+  "uuid": "b8d866fb-3c24-4190-8d4f-e1f59681ae56",
+  "name": "CTR Reclaim EA estado global y próximos pasos",
+  "summary": "",
+  "created_at": "2026-04-08T18:16:50.555192Z",
+  "updated_at": "2026-04-08T20:58:14.762920Z",
+  "account": {
+    "uuid": "5d09915c-393e-444b-b3f2-a55536782902"
+  },
+  "chat_messages": [
+    {
+      "uuid": "019d6e4f-b2b1-775f-a044-05a36ce6811f",
+      "text": "",
+      "content": [
+        {
+          "start_timestamp": "2026-04-08T18:16:52.532440Z",
+          "stop_timestamp": "2026-04-08T18:16:52.532440Z",
+          "flags": null,
+          "type": "text",
+          "text": "",
+          "citations": []
+        }
+      ],
+      "sender": "human",
+      "created_at": "2026-04-08T18:16:52.726839Z",
+      "updated_at": "2026-04-08T18:16:52.726839Z",
+      "attachments": [
+        {
+          "file_name": "",
+          "file_size": 10358,
+          "file_type": "txt",
+          "extracted_content": "# RESUMEN GLOBAL — Proyecto CTR Reclaim EA\r\n## Estado al: 08 de Abril 2026\r\n\r\n---\r\n\r\n## 1. QUÉ ES LA ESTRATEGIA\r\n\r\n**CTR Reclaim — Liquidity Sweep Reversal**\r\n\r\nLógica: El precio marca el HIGH/LOW de una \"key candle\" en la apertura de NY. Una barra posterior barre ese nivel (cierra fuera) y en la siguiente barra revierte cerrando de vuelta dentro. Se entra en la apertura de esa barra de reversión.\r\n\r\n**Reglas exactas (v3.7 producción):**\r\n- Key candle: barra M10 que abre a las **8:40 AM NY** (servidor FP verano: 15:40 GMT+3)\r\n- Señal SELL: barra barre HIGH de key candle y cierra por debajo\r\n- Señal BUY: barra barre LOW de key candle y cierra por encima\r\n- Entrada: apertura de la barra siguiente al sweep\r\n- Filtro de barras: solo barras 3 a 8 post-key candle (WindowMinBar=3, WindowMaxBar=8)\r\n- SL=100 ticks | TP=690 ticks | R:R=6.9x\r\n- BE: mover SL a entry+10 ticks cuando el trade avanza 350 ticks a favor\r\n- Máximo 1 trade por día | Lunes desactivado\r\n\r\n---\r\n\r\n## 2. VERSIÓN ACTUAL DE PRODUCCIÓN: v3.7\r\n\r\n**Archivo:** `CTR_Reclaim_v3_7.mq5` (en /mnt/user-data/outputs/)\r\n\r\n**Parámetros hardcodeados como defaults:**\r\n```\r\nSL_ticks           = 100\r\nTP_ticks           = 690     R:R = 6.9x\r\nWindowMinBar       = 3       (FIJO — regla estructural)\r\nWindowMaxBar       = 8\r\nEnableBreakeven    = true\r\nBE_TriggerTicks    = 350\r\nTradeMonday        = false   (desactivado — PF=0.516 OOS)\r\nTradeTuesday/Wed/Thu/Fri = true\r\nNY_Hour            = 8\r\nNY_Minute          = 40      (¡PENDIENTE ACTUALIZAR a 8:30!)\r\nMagicNumber        = 3700\r\nAccountLeverage    = 20      (FP real)\r\nRiskAmountUSD      = 100     (objetivo, limitado por margen)\r\nValuePerTickPerLot = 0.20    (empírico FP)\r\n```\r\n\r\n**Resultados validados:**\r\n| Período | Trades | PF | Net | DD |\r\n|---|---|---|---|---|\r\n| IS 2021-2023 ($28k) | 604 | 2.167 | +$4,828 | 0.98% |\r\n| OOS 2024-2026 ($100k) | 272 | 1.512 | +$2,302 | 0.82% |\r\n\r\n- Degradación IS→OOS: **-30.2%** (dentro del umbral aceptable)\r\n- OOS por año: 2024 PF=1.391 | 2025 PF=1.681 (mejorando)\r\n- OOS por día: Mar PF=1.125 | Mie PF=2.184★ | Jue PF=1.275 | Vie PF=1.523★\r\n\r\n---\r\n\r\n## 3. ORIGEN DE CADA PARÁMETRO\r\n\r\n| Parámetro | Origen | Detalle |\r\n|---|---|---|\r\n| SL=100 | OPT1 (292 combs, IS 2021-23) | 100% combs con SL=100 son positivas |\r\n| TP=690 | OPT1 | R:R=6.9x, zona óptima IS |\r\n| WindowMaxBar=8 | OPT1 | Zona óptima confirmada |\r\n| EnableBreakeven=true | OPT1 | Siempre superior a false en OPT1 |\r\n| BE_TriggerTicks=350 | OPT1 | Mejor PF promedio |\r\n| WindowMinBar=3 | Analítico | Bar1-2 WR=6-7% < BE WR=12.7% |\r\n| TradeMonday=false | Analítico | IS PF=2.175 → OOS PF=0.516, cambio de signo |\r\n| NY_Hour=8:40 | ⚠️ Sin validar | Lógica ICT, nunca optimizado estadísticamente |\r\n\r\n**#2 mejor configuración OPT1:** igual que ganador pero BE_TriggerTicks=450 (PF=2.052). Confirma robustez del parámetro.\r\n\r\n---\r\n\r\n## 4. WALK-FORWARD ANALYSIS (WFA) — HALLAZGO CRÍTICO\r\n\r\n**Archivos:** `CRT_V3_7_BR.xml` y `CRT_V3_7_FR.xml` (4,806 combinaciones cada uno)\r\n- Métrica: Balance Final (capital $5,000)\r\n- Parámetros optimizados: SL (25-500), TP (50-1000), NY_Hour (12-22), NY_Minute (0/15/30/45), BE (T/F), BE_TriggerTicks\r\n\r\n**MEJOR CONFIGURACIÓN WFA:**\r\n```\r\nSL_ticks    = 100\r\nTP_ticks    = 925      (+34% vs TP=690)\r\nR:R         = 9.25x    (vs 6.9x anterior)\r\nNY_Hour     = 15       (servidor) = 8:30 AM NY\r\nNY_Minute   = 30\r\nEnableBE    = false    (cambio respecto a v3.7)\r\nIS Balance  = $10,092  (+102% sobre $5k)\r\nOOS Balance = $6,609   (+32% sobre $5k)\r\nDD          = 1.49%\r\nTrades OOS  = 266\r\n```\r\n\r\n**Hallazgos WFA:**\r\n- Hora 15:30 servidor (8:30 AM NY): 90.1% de combinaciones rentables en OOS → **HORA ÓPTIMA CONFIRMADA**\r\n- SL=100 sigue siendo el mejor en WFA (también el top en OPT1)\r\n- TP=925 supera a TP=690 en OOS\r\n- BE=false produce mayor robustez OOS que BE=true\r\n- Horas >17:00 servidor: pocas combinaciones rentables en OOS\r\n\r\n**⚠️ PRÓXIMA ACCIÓN CRÍTICA:** Crear v3.8 con: `NY_Minute=30, NY_Hour=15 (8:30 AM NY), TP_ticks=925, EnableBreakeven=false`\r\n\r\n---\r\n\r\n## 5. ANÁLISIS DE RENDIMIENTO\r\n\r\n**Mecánica por cada 100 trades (OOS real):**\r\n- 16 trades llegan al TP → +$97 promedio c/u\r\n- 10 trades llegan al BE → +$0.60 promedio c/u\r\n- 74 trades golpean el SL → -$22 promedio c/u\r\n- **EV por trade: $8.46**\r\n\r\n**Por qué el riesgo real es $22 y no $100:**\r\n- FP cobra margen efectivo ~$92,131 por lot en NAS100\r\n- Con $100k capital: max_lots = 1.11 → riesgo real = $22/trade\r\n- Con $28k capital: max_lots = 0.27 → riesgo real = $5.40/trade\r\n- Para $100/trade real se necesita ~$450k capital o apalancamiento real 1:100\r\n\r\n**Esta estrategia es de INCOME, no de RETO:**\r\n- Genera ~12 trades/mes, EV=~$105/mes sobre $100k (0.1% mensual)\r\n- Para pasar un reto de 8% tardaría ~76 meses (6.4 años)\r\n\r\n---\r\n\r\n## 6. PROBLEMA CENTRAL — MARGEN DEL BROKER\r\n\r\nFP aplica ~92% del nocional como margen en NAS100 (efectivo ~1:5 a pesar de nominal 1:20):\r\n- Retry en EA no funciona porque el problema es estructural de capital\r\n- No es bug de código — es restricción del broker verificada empíricamente\r\n\r\n**Soluciones reales:**\r\n| Capital | Lots | Riesgo/trade |\r\n|---|---|---|\r\n| $28k (actual) | 0.27 | $5.40 |\r\n| $50k | 0.44 | $8.80 |\r\n| $100k | 1.11 | $22.28 |\r\n| ~$450k | 5.00 | $100.00 |\r\n\r\n---\r\n\r\n## 7. EMPRESAS DE FONDEO EVALUADAS\r\n\r\n### Descartadas:\r\n- **BrightFunded**: Anuncia 1:100 pero índices = 1:20 (igual que FP). Marketing engañoso.\r\n- **OFP Funding**: Sin profit target ✓, MT5 ✓, pero **EAs prohibidos** → descartada\r\n- **For Traders Instant**: Sin profit target ✓, pero índices 1:5 → descartada\r\n\r\n### Candidatas activas:\r\n| Firma | Profit Target | MT5 | EA | Apal. índices | Estado |\r\n|---|---|---|---|---|---|\r\n| **Alpine Funded** | ❌ Ninguno | ✓ | ✓ | 1:100 | ★ Mejor opción — verificar margen real |\r\n| **The5ers HG** | ❌ Ninguno | ✓ | ✓ | 1:30 | ✓ Sólida |\r\n| **The5ers HS** | ❌ Ninguno | ✓ | ✓ | 1:25 (fue 1:5 temporal) | Verificar si expiró reducción |\r\n\r\n**Plan de acción para empresas:**\r\n1. Abrir demo en Alpine Funded → correr `OrderCalcMargin()` para NAS100 → si margen/lot < $5,000 es la elección\r\n2. Si margen Alpine = FP → ir a The5ers Hyper Growth ($100k, 1:30)\r\n3. Empezar siempre con cuenta pequeña para validar que el EA ejecuta correctamente\r\n\r\n---\r\n\r\n## 8. ADAPTACIÓN A NUEVOS INSTRUMENTOS\r\n\r\n**Archivo prompt:** `CTR_Reclaim_Prompt_Nuevos_Instrumentos.md` (en /mnt/user-data/outputs/)\r\n\r\n**Candidatos en orden de prioridad:**\r\n1. **EURUSD** — Más prometedor: apalancamiento 1:100 FX, spread 1-3 ticks, $100/trade con solo $1,000-2,000 capital. Sin el problema de margen de NAS100.\r\n2. **XAUUSD** — Buena liquidez en NY, margen moderado, hora óptima puede diferir (evaluar 8:00-8:30 AM)\r\n3. **WTI** — Más arriesgado: EIA miércoles 10:30 AM distorsiona, spread amplio\r\n\r\n**Metodología obligatoria para cada instrumento:**\r\n- Paso 1: Análisis CSV antes de código (confirmar edge estadístico)\r\n- Paso 2: EA de análisis (exporta datos, no ejecuta)\r\n- Paso 3: OPT IS 2021-2023 con métrica PF\r\n- Paso 4: Validación OOS 2024-2026 sin tocar parámetros\r\n- Paso 5: Análisis por día OOS (no IS para evitar overfitting)\r\n\r\n---\r\n\r\n## 9. PENDIENTES CRÍTICOS\r\n\r\n### Inmediato:\r\n1. **Crear v3.8** con parámetros WFA: `NY_Hour=15, NY_Minute=30, TP=925, BE=false`\r\n2. **Correr backtest IS 2021-2023 v3.8** → confirmar impacto del cambio de hora y TP\r\n3. **Correr backtest OOS 2024-2026 v3.8** → comparar con v3.7 (PF=1.512, OOS=$2,302)\r\n\r\n### Próximo sprint:\r\n4. **Demo Alpine Funded** → verificar margen real NAS100 con `OrderCalcMargin()`\r\n5. **Probar LONG-only** en NAS100 (sesgo alcista del índice, nunca validado)\r\n6. **Walk-forward 3 splits** para validación robusta adicional\r\n7. **Iniciar adaptación EURUSD** usando el prompt maestro\r\n\r\n---\r\n\r\n## 10. ARCHIVOS CLAVE\r\n\r\n### En /mnt/user-data/outputs/:\r\n- `CTR_Reclaim_v3_7.mq5` — EA de producción actual\r\n- `CTR_Reclaim_Prompt_Nuevos_Instrumentos.md` — Prompt para XAUUSD/WTI/EURUSD\r\n\r\n### En /mnt/user-data/uploads/ (backtests más recientes):\r\n- `CTR_v37_NDX100_M10_3700.csv` — OOS 2024-2026 v3.7 (272 trades, PF=1.512)\r\n- `CTR_v37_RESUMEN_NDX100_3700.csv` — Resumen OOS v3.7\r\n- `CTR_v362_NDX100_M10_3620.csv` — OOS v3.6.2 (para referencia)\r\n- `CRT_V3_7_BR.xml` — Walk-Forward 4,806 combinaciones\r\n- `CRT_V3_7_FR.xml` — Walk-Forward 4,806 combinaciones (idéntico a BR)\r\n- `ReportOptimizer-11606849.xml` — OPT1 IS (292 combinaciones)\r\n\r\n---\r\n\r\n## 11. CONTEXTO TÉCNICO\r\n\r\n- **Plataforma:** MetaTrader 5 (MQL5)\r\n- **Broker/Prop Firm:** Funding Pips — demo, servidor GMT+3 verano / GMT+2 invierno\r\n- **Capital base backtests:** IS=$28,000 / OOS=$100,000\r\n- **Instrumento principal:** NDX100 (NAS100) M10\r\n- **EA features:** Fill mode auto-detección (FOK/IOC/RETURN), OrderCalcMargin() para margen real, CSV export con DD tracking, circuit breakers configurables, dashboard en pantalla\r\n- **Convención versiones:** `CTR_Reclaim_v{X.Y}.mq5` | MagicNumber=versión×100 (v3.7=3700)\r\n- **Timezone fórmula:** Servidor FP = NY_EDT + 4 + GMT_Offset (verano GMT_Offset=3 → servidor = NY+7, entonces NY 8:30 AM = servidor 15:30)\r\n\r\n---\r\n\r\n## 12. LECCIONES APRENDIDAS (no repetir)\r\n\r\n1. **Python string replacement en MQL5 es frágil** — siempre verificar con grep post-reemplazo\r\n2. **MT5 optimizer retiene últimos valores** — verificar parámetros activos antes de confiar en resultados\r\n3. **ValuePerTickPerLot siempre empírico** — no asumir, medir en el broker real\r\n4. **Análisis por días requiere >100 trades/día** — con menos es ruido estadístico\r\n5. **Lunes: IS estrella → OOS negativo** — cambio de signo = overfitting clásico\r\n6. **TradesFailed no se arregla con código** — es restricción de capital/margen estructural\r\n7. **BE=false puede ser más robusto OOS** — WFA confirmó que BE agrega poco valor real\r\n8. **La métrica de optimización importa** — OPT1 usó PF, WFA usó Balance Final; pueden dar resultados diferentes\r\n9. **BrightFunded \"1:100\"** — es marketing, los índices son 1:20 real\r\n10. **OFP prohíbe EAs** — a pesar de no tener profit target, incompatible con esta estrategia\r\n\r\n---\r\n\r\n*Resumen generado: 08 Abril 2026*\r\n*Próxima versión a desarrollar: CTR Reclaim v3.8 (NY=8:30 AM, TP=925, BE=false)*"
+        }
+      ],
+      "files": [
+        {
+          "file_uuid": "5ee50fe8-0af7-4f9b-af5b-6a414143e215",
+          "file_name": ""
+        }
+      ],
+      "parent_message_uuid": "00000000-0000-4000-8000-000000000000"
+    },
+    {
+      "uuid": "019d6e4f-b2b1-779e-89a0-c036ba3660cd",
+      "text": " # CTR Reclaim EA — Estado Global ✓\n\nYa tengo el contexto completo. Aquí está mi lectura rápida del estado actual:\n\n**Lo que está sólido:**\n- v3.7 validada IS+OOS con degradación aceptable (-30.2%)\n- WFA de 4,806 combinaciones completado → parámetros v3.8 claros\n- Causa raíz del problema de margen identificada (no es bug)\n- Pipeline de fondeo priorizado correctamente\n\n**El siguiente paso crítico es v3.8:**\n```\nNY_Hour=15, NY_Minute=30\nTP_ticks=925 (de 690)\nEnableBreakeven=false\n```\n\n---\n\n¿Con qué quieres continuar ahora?\n```\nThis block is not supported on your current device yet.\n```\n\n",
+      "content": [
+        {
+          "start_timestamp": "2026-04-08T18:16:53.458679Z",
+          "stop_timestamp": "2026-04-08T18:16:57.987354Z",
+          "flags": null,
+          "type": "text",
+          "text": " # CTR Reclaim EA — Estado Global ✓\n\nYa tengo el contexto completo. Aquí está mi lectura rápida del estado actual:\n\n**Lo que está sólido:**\n- v3.7 validada IS+OOS con degradación aceptable (-30.2%)\n- WFA de 4,806 combinaciones completado → parámetros v3.8 claros\n- Causa raíz del problema de margen identificada (no es bug)\n- Pipeline de fondeo priorizado correctamente\n\n**El siguiente paso crítico es v3.8:**\n```\nNY_Hour=15, NY_Minute=30\nTP_ticks=925 (de 690)\nEnableBreakeven=false\n```\n\n---\n\n¿Con qué quieres continuar ahora?",
+          "citations": []
+        },
+        {
+          "start_timestamp": "2026-04-08T18:16:58.421864Z",
+          "stop_timestamp": "2026-04-08T18:16:59.976906Z",
+          "flags": null,
+          "type": "tool_use",
+          "id": "toolu_01CzKYqLAwicKfknAHC55foV",
+          "name": "ask_user_input_v0",
+          "input": {
+            "questions": [
+              {
+                "type": "single_select",
+                "options": [
+                  "Crear v3.8 (cambios WFA)",
+                  "Backtest IS/OOS v3.8 (análisis CSV)",
+                  "Demo Alpine Funded (verificar margen)",
+                  "Adaptación EURUSD (nuevo instrumento)"
+                ],
+                "question": "¿Cuál es la tarea de hoy?"
+              }
+            ]
+          },
+          "message": "Generating ask_user_input_v0...",
+          "integration_name": "Dynamic Widget",
+          "integration_icon_url": null,
+          "icon_name": null,
+          "context": null,
+          "display_content": null,
+          "approval_options": null,
+          "approval_key": null,
+          "is_mcp_app": null,
+          "mcp_server_url": null
+        },
+        {
+          "start_timestamp": null,
+          "stop_timestamp": null,
+          "flags": null,
+          "type": "tool_result",
+          "tool_use_id": "toolu_01CzKYqLAwicKfknAHC55foV",
+          "name": "ask_user_input_v0",
+          "content": [
+            {
+              "type": "text",
+              "text": "{\n  \"questions\": [\n    {\n      \"question\": \"\\u00bfCu\\u00e1l es la tarea de hoy?\",\n      \"type\": \"single_select\",\n      \"options\": [\n        \"Crear v3.8 (cambios WFA)\",\n        \"Backtest IS/OOS v3.8 (an\\u00e1lisis CSV)\",\n        \"Demo Alpine Funded (verificar margen)\",\n        \"Adaptaci\\u00f3n EURUSD (nuevo instrumento)\"\n      ]\n    }\n  ]\n}",
+              "uuid": "38d0347f-582d-4429-b750-eff8318612e9"
+            }
+          ],
+          "is_error": false,
+          "structured_content": null,
+          "meta": null,
+          "message": "Generated ask_user_input_v0 widget",
+          "integration_name": "Dynamic Widget",
+          "mcp_server_url": null,
+          "integration_icon_url": null,
+          "icon_name": null,
+          "display_content": null
+        },
+        {
+          "start_timestamp": "2026-04-08T18:17:01.339062Z",
+          "stop_timestamp": "2026-04-08T18:17:01.339062Z",
+          "flags": null,
+          "type": "text",
+          "text": "",
+          "citations": []
+        }
+      ],
+      "sender": "assistant",
+      "created_at": "2026-04-08T18:17:01.469858Z",
+      "updated_at": "2026-04-08T18:17:01.469858Z",
+      "attachments": [],
+      "files": [],
+      "parent_message_uuid": "019d6e4f-b2b1-775f-a044-05a36ce6811f"
+    },
+    {
+      "uuid": "019d6e50-3d12-7071-a216-6e26a67bfea9",
+      "text": "[User dismissed — do not proceed, wait for next instruction]",
+      "content": [
+        {
+          "start_timestamp": "2026-04-08T18:17:28.202109Z",
+          "stop_timestamp": "2026-04-08T18:17:28.202109Z",
+          "flags": null,
+          "type": "text",
+          "text": "[User dismissed — do not proceed, wait for next instruction]",
+          "citations": []
+        }
+      ],
+      "sender": "human",
+      "created_at": "2026-04-08T18:17:28.236838Z",
+      "updated_at": "2026-04-08T18:17:28.236838Z",
+      "attachments": [],
+      "files": [],
+      "parent_message_uuid": "019d6e4f-b2b1-779e-89a0-c036ba3660cd"
+    },
+    {
+      "uuid": "019d6e50-3d12-73b1-afe9-7ad4e87bcdd8",
+      "text": " Listo, esperando tu instrucción.",
+      "content": [
+        {
+          "start_timestamp": "2026-04-08T18:17:29.375969Z",
+          "stop_timestamp": "2026-04-08T18:17:29.508603Z",
+          "flags": null,
+          "type": "text",
+          "text": " Listo, esperando tu instrucción.",
+          "citations": []
+        }
+      ],
+      "sender": "assistant",
+      "created_at": "2026-04-08T18:17:29.564439Z",
+      "updated_at": "2026-04-08T18:17:29.564439Z",
+      "attachments": [],
+      "files": [],
+      "parent_message_uuid": "019d6e50-3d12-7071-a216-6e26a67bfea9"
+    }
+  ]
+}

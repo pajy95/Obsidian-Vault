@@ -1,0 +1,52 @@
+; TBR v1.1 — GBPJPY P110836
+; Segunda meseta: Hr=8 Min=55 | RR=2.5 | BUY | Range=6 | BE=0.60
+; Pipeline VIABLE 2026-05-23 (11/11 criterios)
+; Magic: 202510
+
+[MODO ESTRATEGIA]
+TradeDirection=1
+EntryMode=1
+
+[SESION]
+SessionStart_Hour=8
+SessionStart_Min=55
+SessionEnd_Hour=18
+SessionEnd_Min=0
+MaxHoldHours=2
+ServerOffsetHours=2
+
+[RANGO]
+RangeCandlesCount=6
+
+[FILTROS v1.1]
+UseRangeFilter=false
+RangeFilter_MinPips=0.0
+RangeFilter_MaxPips=999.0
+UseATRFilter=false
+ATRFilter_Multiplier=1.0
+UseEntryWindow=false
+EntryWindow_Minutes=60
+
+[GESTION POSICION]
+RR=2.5
+
+[BREAKEVEN]
+UseBreakeven=true
+BE_TriggerRR=0.60
+
+[RIESGO]
+RiskAmountUSD=12.5
+
+[DIAS]
+TradeMonday=true
+TradeTuesday=true
+TradeWednesday=true
+TradeThursday=true
+TradeFriday=true
+
+[CONFIG]
+MagicNumber=202510
+TradeComment=TBR_GBPJPY_P110836
+
+[LOGGING]
+EnableLogging=false

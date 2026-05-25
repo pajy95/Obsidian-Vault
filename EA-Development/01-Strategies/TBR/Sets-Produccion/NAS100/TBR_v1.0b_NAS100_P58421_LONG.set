@@ -1,0 +1,64 @@
+; ============================================================
+; SET FILE — TBR v1.0b | NAS100 M5 | P58421 LONG
+; Veredicto: VIABLE IS/OOS/WFA/Robustez/MC
+; Pass: P58421 | Candles=4 | Min=10 | EndH=19 | RR=5.8 | BE=0.50
+; Validado: 2026-05-14 | Broker: FundingPips
+; CRITICO: TradeDirection=1 (DIR_BUY = Solo Long)
+; CRITICO: SessionStart_Hour=14 UTC = 17:10 server (UTC+3)
+; ============================================================
+
+; === MODO DE ESTRATEGIA ===
+TradeDirection=1
+EntryMode=1
+
+; === SESION HORARIA ===
+RangeCandlesCount=4
+SessionStart_Hour=14
+SessionStart_Min=10
+SessionEnd_Hour=19
+SessionEnd_Min=0
+ServerOffsetHours=2
+
+; === FILTROS ===
+SpreadFilter_Enable=false
+MaxSpread=20
+
+; === FILTRO DE GAP ===
+GapFilter_Enable=false
+MaxGapPct=0.5
+
+; === GESTION DE POSICION ABIERTA ===
+CloseAfterHours_Enable=true
+MaxHoldHours=4
+
+; === STOP LOSS Y TAKE PROFIT ===
+SL_AtRangeExtreme=true
+RR=5.8
+StopLevel_ExtraPoints=10
+
+; === BREAKEVEN ===
+UseBreakeven=true
+BE_TriggerRR=0.50
+BE_BufferPct=2.0
+
+; === RIESGO ===
+RiskAmountUSD=12.5
+
+; === DIAS DE TRADING ===
+TradeSunday=false
+TradeMonday=true
+TradeTuesday=true
+TradeWednesday=true
+TradeThursday=true
+TradeFriday=true
+TradeSaturday=false
+
+; === LOGGING ===
+EnableCSV=true
+EnableLog=true
+
+; === VISUALES ===
+VIS_Enable=true
+
+; === CONFIG ===
+MagicNumber=202503

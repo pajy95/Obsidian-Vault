@@ -1,0 +1,241 @@
+{
+  "main": {
+    "id": "fe30205524f22a97",
+    "type": "split",
+    "children": [
+      {
+        "id": "f99a0691db505978",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "c80000ec1107276d",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "M(Modelos Aleatorios)/Analisis I/02-Sucesiones.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "02-Sucesiones"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "3516f6b5e2d0d2b9",
+    "type": "split",
+    "children": [
+      {
+        "id": "344efa0a86c0a970",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "8a4dcee4b87043b6",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "705b5602cab911a3",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Buscar"
+            }
+          },
+          {
+            "id": "ebe015ddf4f80d4a",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Marcadores"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 346.5
+  },
+  "right": {
+    "id": "84991389e5c65763",
+    "type": "split",
+    "children": [
+      {
+        "id": "c01c58c4df9efc2c",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "01fb796b911df4bb",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Bienvenido.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Enlaces entrantes de Bienvenido"
+            }
+          },
+          {
+            "id": "fa08a0ac3ba01895",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Bienvenido.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Enlaces salientes de Bienvenido"
+            }
+          },
+          {
+            "id": "9aa2bb6ca9b25b7c",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Etiquetas"
+            }
+          },
+          {
+            "id": "2f66354a1605d9b8",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "Todas las propiedades"
+            }
+          },
+          {
+            "id": "abd980a874ee6cd3",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Bienvenido.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Esquema de Bienvenido"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "templater-obsidian:Templater": false,
+      "obsidian-git:Open Git source control": false,
+      "obsidian-excalidraw-plugin:New drawing": false,
+      "table-editor-obsidian:Advanced Tables Toolbar": false,
+      "obsidian-kanban:Create new board": false,
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "c80000ec1107276d",
+  "lastOpenFiles": [
+    "01-Strategies/TBR/Analisis-MonteCarlo/GBPJPY/GBPJPY_Correlacion_P110836_P121378.png",
+    "01-Strategies/TBR/Analisis-MonteCarlo/AUDJPY/AUDJPY_Heatmap_HourRR.png",
+    "01-Strategies/TBR/Analisis-MonteCarlo/AUDJPY/AUDJPY_Heatmap_HourMin.png",
+    "01-Strategies/TBR/Optimizacion/AUDJPY/TBR_v1.1_AUDJPY_M5_IS2022-2025_Asian.xml",
+    "01-Strategies/TBR/Analisis-MonteCarlo/AUDJPY",
+    "01-Strategies/TBR/Backtests/AUDJPY",
+    "01-Strategies/TBR/Optimizacion/AUDJPY/Sets",
+    "01-Strategies/TBR/Optimizacion/AUDJPY",
+    "01-Strategies/TBR/Optimizacion/audjpy op.xml",
+    "01-Strategies/TBR/Optimizacion/audjpy op.xml.filepart",
+    "01-Strategies/RBR/Code/RBR_v1.0.ex5",
+    "01-Strategies/RBR/Code/RBR_v1.0.log",
+    "01-Strategies/RBR/Code/RBR_v1.0.mq5",
+    "M(Modelos Aleatorios)/Analisis I/Ejercicios-Cap1-Soluciones.md",
+    "01-Strategies/TBR/Decisions/GBPJPY_P121378_2026-05-22_MonteCarlo.md",
+    "M(Modelos Aleatorios)/Probabilidad/P01-Conjuntos.md",
+    "M(Modelos Aleatorios)/Temario.md",
+    "M(Modelos Aleatorios)/Analisis I/Sesion-01-Numeros-Reales.md",
+    "M(Modelos Aleatorios)/Analisis I/Ejercicios-Cap2-Soluciones.md",
+    "01-Strategies/TBR/Decisions/EURJPY_2026-05-19_NVIABLE.md",
+    "01-Strategies/TBR/Analisis-MonteCarlo/PermutationTest_Resumen.png",
+    "01-Strategies/TBR/Analisis-MonteCarlo/PermutationTest_TBR_Portfolio.png",
+    "01-Strategies/TBR/Analisis-MonteCarlo/SPX500/Analisis_SPX500_full.png",
+    "01-Strategies/TBR/Analisis-MonteCarlo/GBPUSD/Analisis_GBPUSD_full.png",
+    "01-Strategies/TBR/Analisis-MonteCarlo/USDJPY/Equity_USDJPY_P7389_P5458.png",
+    "01-Strategies/TBR/Analisis-MonteCarlo/USDJPY/MC_USDJPY_P7389_P5458.png",
+    "01-Strategies/TBR/Analisis-MonteCarlo/USDJPY/Robustez_USDJPY_P7389_P5458.png",
+    "01-Strategies/TBR/TBR.md",
+    "01-Strategies/TBR/Trade-Journal/Trade-Journal.md",
+    "01-Strategies/ARE/Analysis/Analysis.md",
+    "01-Strategies/TBR/Chat-History/111 - TBR XAU IS-OOS P1 P2 analisis y parametros produccion.md",
+    "01-Strategies/TBR/WalkForward/XAUUSD/WFA_XAUUSD_P1_2026.md",
+    "01-Strategies/TBR/Decisions/XAUUSD/TBR_XAUUSD_P2_Analysis.md",
+    "01-Strategies/CTR-Pro/Strategy - CTR Pro.md",
+    "01-Strategies/CTR-Pro/Trade-Journal/Trade-Journal.md",
+    "01-Strategies/ARE/Strategy - ARE.md",
+    "01-Strategies/CTR-Pro/WalkForward/Walkforward.md",
+    "07-Knowledge/Workflow/quant-trader-blueprint.md",
+    "07-Knowledge/quant-trader-blueprint.md",
+    "01-Strategies/CTR-Pro/Sets-Produccion/NDX100/NDX100_M10_v3.8.md",
+    "01-Strategies/CTR-Pro/Sets-Produccion/XAUUSD/XAUUSD_M5_v1.md",
+    "01-Strategies/CTR-Pro/Chat-History/Chat History.md",
+    "01-Strategies/CTR-Pro/Code/Code.md",
+    "01-Strategies/CTR-Pro/Sets-Produccion/Sets-Produccion.md",
+    "01-Strategies/CTR-Pro/Optimizacion/Optimizacion.md",
+    "01-Strategies/BreakoutNY/Breakout NY - Image.png",
+    "Sin título.canvas"
+  ]
+}

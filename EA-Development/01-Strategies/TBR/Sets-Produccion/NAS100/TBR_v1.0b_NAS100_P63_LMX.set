@@ -1,0 +1,62 @@
+; ============================================================
+; SET FILE — TBR v1.0b | NAS100 M5 | P63 Lun+Mar+Mié
+; Veredicto: VIABLE IS/OOS/WFA | EN DEMO
+; Pass: P63 | Candles=2 | Min=15 | RR=4.0
+; Validado: 2026-05-11 | Broker: FundingPips
+; ============================================================
+
+; === MODO DE ESTRATEGIA ===
+TradeDirection=1
+EntryMode=1
+
+; === SESION HORARIA ===
+RangeCandlesCount=2
+SessionStart_Hour=14
+SessionStart_Min=15
+SessionEnd_Hour=18
+SessionEnd_Min=0
+ServerOffsetHours=2
+
+; === FILTROS ===
+SpreadFilter_Enable=false
+MaxSpread=20
+
+; === FILTRO DE GAP ===
+GapFilter_Enable=false
+MaxGapPct=0.5
+
+; === GESTION DE POSICION ABIERTA ===
+CloseAfterHours_Enable=true
+MaxHoldHours=4
+
+; === STOP LOSS Y TAKE PROFIT ===
+SL_AtRangeExtreme=true
+RR=4.0
+StopLevel_ExtraPoints=10
+
+; === BREAKEVEN ===
+UseBreakeven=false
+BE_TriggerRR=1.0
+BE_BufferPct=2.0
+
+; === RIESGO ===
+RiskAmountUSD=12.5
+
+; === DIAS DE TRADING ===
+TradeSunday=false
+TradeMonday=true
+TradeTuesday=true
+TradeWednesday=true
+TradeThursday=false
+TradeFriday=false
+TradeSaturday=false
+
+; === LOGGING ===
+EnableCSV=true
+EnableLog=true
+
+; === VISUALES ===
+VIS_Enable=true
+
+; === CONFIG ===
+MagicNumber=202501

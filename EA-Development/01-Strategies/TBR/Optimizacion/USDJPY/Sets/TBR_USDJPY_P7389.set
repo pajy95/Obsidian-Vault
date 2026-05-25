@@ -1,0 +1,11 @@
+; TBR v1.1 USDJPY — P7389
+; Generado: 2026-05-18
+
+TradeDirection=0
+EntryMode=1
+RangeCandlesCount=6
+SessionStart_Hour=3
+SessionStart_Min=50
+RR=3.0
+UseBreakeven=true
+MagicNumber=202505

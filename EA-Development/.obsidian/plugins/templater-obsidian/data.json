@@ -1,0 +1,58 @@
+{
+  "command_timeout": 5,
+  "templates_folder": "_Templates",
+  "templates_pairs": [
+    [
+      "",
+      ""
+    ]
+  ],
+  "trigger_on_file_creation": true,
+  "auto_jump_to_cursor": false,
+  "enable_system_commands": false,
+  "shell_path": "",
+  "user_scripts_folder": "",
+  "enable_folder_templates": true,
+  "folder_templates": [
+    {
+      "folder": "_Templates",
+      "template": "Bienvenido.md"
+    },
+    {
+      "folder": "01-Strategies",
+      "template": "_Templates/Estrategia.md"
+    },
+    {
+      "folder": "03--Backtest",
+      "template": "_Templates/Backtest.md"
+    },
+    {
+      "folder": "04-Sessions",
+      "template": "_Templates/Sesion.md"
+    },
+    {
+      "folder": "06-Bugs",
+      "template": "_Templates/Bug.md"
+    },
+    {
+      "folder": "02-Code-Docs",
+      "template": "_Templates/Modulos.md"
+    }
+  ],
+  "enable_file_templates": false,
+  "file_templates": [
+    {
+      "regex": ".*",
+      "template": ""
+    }
+  ],
+  "syntax_highlighting": true,
+  "syntax_highlighting_mobile": false,
+  "enabled_templates_hotkeys": [
+    ""
+  ],
+  "startup_templates": [
+    ""
+  ],
+  "intellisense_render": 1
+}

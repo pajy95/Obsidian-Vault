@@ -1,0 +1,20 @@
+{
+  "enableInlineDataview": true,
+  "enableDataviewJs": true,
+  "enableInlineDataviewJs": true,
+  "prettyRenderInlineFields": true,
+  "taskCompletionTracking": true,
+  "taskCompletionUseEmojiShorthand": false,
+  "taskCompletionText": "completion",
+  "taskCompletionDateFormat": "yyyy-MM-dd",
+  "recursiveSubTaskCompletion": false,
+  "warnOnMissingFrontmatter": false,
+  "renderNullAs": "\\-",
+  "tableIdColumnName": "Archivo",
+  "tableGroupColumnName": "Grupo",
+  "maxRecursiveRenderDepth": 4,
+  "defaultDateFormat": "MMMM dd, yyyy",
+  "defaultDateTimeFormat": "h:mm a - MMMM dd, yyyy",
+  "refreshInterval": 2500,
+  "showResultCount": true
+}

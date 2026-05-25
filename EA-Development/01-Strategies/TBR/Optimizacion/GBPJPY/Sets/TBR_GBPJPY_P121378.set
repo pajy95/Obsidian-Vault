@@ -1,0 +1,52 @@
+; TBR v1.1 — GBPJPY P121378
+; Primera meseta: Hr=9 Min=0 | RR=3.0 | BUY | Range=6 | BE=0.60
+; Pipeline VIABLE 2026-05-22 | WFA negativo (0.918) — regimen adverso 2026
+; Magic: 202509
+
+[MODO ESTRATEGIA]
+TradeDirection=1
+EntryMode=1
+
+[SESION]
+SessionStart_Hour=9
+SessionStart_Min=0
+SessionEnd_Hour=18
+SessionEnd_Min=0
+MaxHoldHours=2
+ServerOffsetHours=2
+
+[RANGO]
+RangeCandlesCount=6
+
+[FILTROS v1.1]
+UseRangeFilter=false
+RangeFilter_MinPips=0.0
+RangeFilter_MaxPips=999.0
+UseATRFilter=false
+ATRFilter_Multiplier=1.0
+UseEntryWindow=false
+EntryWindow_Minutes=60
+
+[GESTION POSICION]
+RR=3.0
+
+[BREAKEVEN]
+UseBreakeven=true
+BE_TriggerRR=0.60
+
+[RIESGO]
+RiskAmountUSD=12.5
+
+[DIAS]
+TradeMonday=true
+TradeTuesday=true
+TradeWednesday=true
+TradeThursday=true
+TradeFriday=true
+
+[CONFIG]
+MagicNumber=202509
+TradeComment=TBR_GBPJPY_P121378
+
+[LOGGING]
+EnableLogging=false

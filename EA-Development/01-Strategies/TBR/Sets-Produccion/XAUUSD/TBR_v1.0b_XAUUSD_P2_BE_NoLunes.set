@@ -1,0 +1,65 @@
+; ============================================================
+; SET FILE — TBR v1.0b | XAUUSD M5 | P2 BE sin Lunes
+; Veredicto: VIABLE IS/OOS/WFA/Robustez/MC
+; Candles=3 | Min=45 | EndH=17 | RR=3.6 | BE=0.75 | TradeMonday=false
+; Validado: 2026-05-12 | Broker: FundingPips
+; CRITICO: TradeDirection=0 (DIR_BOTH = Long + Short)
+; CRITICO: SessionStart_Hour=14 UTC = 16:45 server (UTC+2/UTC+3)
+; CRITICO: TradeMonday=false — filtro de Lunes obligatorio
+; ============================================================
+
+; === MODO DE ESTRATEGIA ===
+TradeDirection=0
+EntryMode=1
+
+; === SESION HORARIA ===
+RangeCandlesCount=3
+SessionStart_Hour=14
+SessionStart_Min=45
+SessionEnd_Hour=17
+SessionEnd_Min=0
+ServerOffsetHours=2
+
+; === FILTROS ===
+SpreadFilter_Enable=false
+MaxSpread=20
+
+; === FILTRO DE GAP ===
+GapFilter_Enable=false
+MaxGapPct=0.5
+
+; === GESTION DE POSICION ABIERTA ===
+CloseAfterHours_Enable=true
+MaxHoldHours=4
+
+; === STOP LOSS Y TAKE PROFIT ===
+SL_AtRangeExtreme=true
+RR=3.6
+StopLevel_ExtraPoints=10
+
+; === BREAKEVEN ===
+UseBreakeven=true
+BE_TriggerRR=0.75
+BE_BufferPct=2.0
+
+; === RIESGO ===
+RiskAmountUSD=12.5
+
+; === DIAS DE TRADING ===
+TradeSunday=false
+TradeMonday=false
+TradeTuesday=true
+TradeWednesday=true
+TradeThursday=true
+TradeFriday=true
+TradeSaturday=false
+
+; === LOGGING ===
+EnableCSV=true
+EnableLog=true
+
+; === VISUALES ===
+VIS_Enable=true
+
+; === CONFIG ===
+MagicNumber=202502

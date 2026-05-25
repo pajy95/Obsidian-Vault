@@ -1,0 +1,52 @@
+{
+  "uuid": "85fd470a-b04b-4865-a138-12a9cde9f401",
+  "name": "Optimizar memoria y tokens con Claude Code",
+  "summary": "",
+  "created_at": "2026-04-11T00:01:55.354114Z",
+  "updated_at": "2026-04-11T00:02:12.107413Z",
+  "account": {
+    "uuid": "5d09915c-393e-444b-b3f2-a55536782902"
+  },
+  "chat_messages": [
+    {
+      "uuid": "019d79d8-59f9-7056-8fd7-4056347bd6b2",
+      "text": "Hola Claude, como bien sabes al parecer tenemos problemas con la memoria. Quiero que me ayudes a solventar este problema. Crees que si uso claude code desde una terminal de codigo(recomiendame una, la mejor), obsidian para organizar informacion y que puedas acceder a ella de manera local, puedas mejorar el consumo de tokens y mejorar la fluidez de trabajo.",
+      "content": [
+        {
+          "start_timestamp": "2026-04-11T00:01:55.633125Z",
+          "stop_timestamp": "2026-04-11T00:01:55.633125Z",
+          "flags": null,
+          "type": "text",
+          "text": "Hola Claude, como bien sabes al parecer tenemos problemas con la memoria. Quiero que me ayudes a solventar este problema. Crees que si uso claude code desde una terminal de codigo(recomiendame una, la mejor), obsidian para organizar informacion y que puedas acceder a ella de manera local, puedas mejorar el consumo de tokens y mejorar la fluidez de trabajo.",
+          "citations": []
+        }
+      ],
+      "sender": "human",
+      "created_at": "2026-04-11T00:01:55.666555Z",
+      "updated_at": "2026-04-11T00:01:55.666555Z",
+      "attachments": [],
+      "files": [],
+      "parent_message_uuid": "00000000-0000-4000-8000-000000000000"
+    },
+    {
+      "uuid": "019d79d8-59f9-7b47-8ce4-e813199e26c1",
+      "text": " Hola Jose! Sí, el problema de memoria/contexto es real y frustrante cuando trabajas en proyectos largos como tus EAs.\n\nDéjame ser honesto sobre lo que funciona y lo que no antes de recomendarte un stack.\n\n## El problema real\n\nEl límite de contexto de Claude no es solo de \"memoria entre sesiones\" — es que cada conversación empieza desde cero, y proyectos complejos como tus EAs MQL4/5 consumen tokens rápidamente cuando tienes que re-explicar todo.\n\n## ¿Claude Code + Obsidian resuelve esto?\n\n**Parcialmente sí, con matices importantes:**\n\n**Claude Code (terminal)** — sí te ayuda porque:\n- Lee archivos directamente del filesystem, no necesitas pegar código\n- Mantiene contexto del proyecto mientras la sesión está activa\n- Opera sobre múltiples archivos a la vez\n- **Terminal recomendada: Windows Terminal + WSL2** si estás en Windows, o simplemente la terminal nativa si usas Linux/Mac\n\n**Obsidian como \"memoria externa\"** — esta es la parte más valiosa:\n- Puedes crear un vault con documentos de contexto que Claude Code lee al inicio de cada sesión\n- Un archivo `CONTEXT.md` con: estado actual del EA, decisiones tomadas, parámetros probados, resultados IS/OOS\n- Funciona como tu \"Prompt Maestro\" pero vivo y actualizable\n\n## Stack que te recomendaría\n\n```\nObsidian Vault (tu cerebro externo)\n├── /EAs/DonchianEA/CONTEXT.md      ← estado actual\n├── /EAs/DonchianEA/RESULTADOS.md   ← backtests IS/OOS\n├── /EAs/DonchianEA/DECISIONES.md   ← log de cambios\n└── /methodology/PromptMaestro.md   ← tu workflow\n\nClaude Code (lee estos archivos al inicio)\n└── \"Lee CONTEXT.md y continúa desde ahí\"\n```\n\n## Lo que NO resuelve\n\n- El límite de contexto *dentro* de una sesión larga sigue existiendo\n- Claude Code no tiene memoria persistente entre sesiones tampoco — la diferencia es que tú le das el contexto leyendo archivos locales, más eficientemente que pegando texto\n\n## Mi recomendación concreta\n\n1. **Terminal**: Windows Terminal con WSL2 (si estás en Windows) — la mejor experiencia para Claude Code\n2. **Obsidian**: crea un vault estructurado por proyecto con un `CONTEXT.md` estandarizado\n3. **Workflow**: al inicio de cada sesión de Claude Code, un prompt corto: *\"Lee los archivos en /ruta/DonchianEA/ y continúa el desarrollo\"*\n\n¿Quieres que te diseñe una plantilla de `CONTEXT.md` específica para tu metodología de desarrollo de EAs? Podría ser muy útil dado el nivel de detalle que manejas en tus proyectos.",
+      "content": [
+        {
+          "start_timestamp": "2026-04-11T00:01:56.651848Z",
+          "stop_timestamp": "2026-04-11T00:02:12.072773Z",
+          "flags": null,
+          "type": "text",
+          "text": " Hola Jose! Sí, el problema de memoria/contexto es real y frustrante cuando trabajas en proyectos largos como tus EAs.\n\nDéjame ser honesto sobre lo que funciona y lo que no antes de recomendarte un stack.\n\n## El problema real\n\nEl límite de contexto de Claude no es solo de \"memoria entre sesiones\" — es que cada conversación empieza desde cero, y proyectos complejos como tus EAs MQL4/5 consumen tokens rápidamente cuando tienes que re-explicar todo.\n\n## ¿Claude Code + Obsidian resuelve esto?\n\n**Parcialmente sí, con matices importantes:**\n\n**Claude Code (terminal)** — sí te ayuda porque:\n- Lee archivos directamente del filesystem, no necesitas pegar código\n- Mantiene contexto del proyecto mientras la sesión está activa\n- Opera sobre múltiples archivos a la vez\n- **Terminal recomendada: Windows Terminal + WSL2** si estás en Windows, o simplemente la terminal nativa si usas Linux/Mac\n\n**Obsidian como \"memoria externa\"** — esta es la parte más valiosa:\n- Puedes crear un vault con documentos de contexto que Claude Code lee al inicio de cada sesión\n- Un archivo `CONTEXT.md` con: estado actual del EA, decisiones tomadas, parámetros probados, resultados IS/OOS\n- Funciona como tu \"Prompt Maestro\" pero vivo y actualizable\n\n## Stack que te recomendaría\n\n```\nObsidian Vault (tu cerebro externo)\n├── /EAs/DonchianEA/CONTEXT.md      ← estado actual\n├── /EAs/DonchianEA/RESULTADOS.md   ← backtests IS/OOS\n├── /EAs/DonchianEA/DECISIONES.md   ← log de cambios\n└── /methodology/PromptMaestro.md   ← tu workflow\n\nClaude Code (lee estos archivos al inicio)\n└── \"Lee CONTEXT.md y continúa desde ahí\"\n```\n\n## Lo que NO resuelve\n\n- El límite de contexto *dentro* de una sesión larga sigue existiendo\n- Claude Code no tiene memoria persistente entre sesiones tampoco — la diferencia es que tú le das el contexto leyendo archivos locales, más eficientemente que pegando texto\n\n## Mi recomendación concreta\n\n1. **Terminal**: Windows Terminal con WSL2 (si estás en Windows) — la mejor experiencia para Claude Code\n2. **Obsidian**: crea un vault estructurado por proyecto con un `CONTEXT.md` estandarizado\n3. **Workflow**: al inicio de cada sesión de Claude Code, un prompt corto: *\"Lee los archivos en /ruta/DonchianEA/ y continúa el desarrollo\"*\n\n¿Quieres que te diseñe una plantilla de `CONTEXT.md` específica para tu metodología de desarrollo de EAs? Podría ser muy útil dado el nivel de detalle que manejas en tus proyectos.",
+          "citations": []
+        }
+      ],
+      "sender": "assistant",
+      "created_at": "2026-04-11T00:02:12.107413Z",
+      "updated_at": "2026-04-11T00:02:12.107413Z",
+      "attachments": [],
+      "files": [],
+      "parent_message_uuid": "019d79d8-59f9-7056-8fd7-4056347bd6b2"
+    }
+  ]
+}

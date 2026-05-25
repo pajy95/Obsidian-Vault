@@ -1,0 +1,176 @@
+{
+  "uuid": "fd93f72c-27a3-431a-b42f-206554d81c37",
+  "name": "Crear v3.8 con parámetros WFA",
+  "summary": "",
+  "created_at": "2026-04-08T18:44:39.484728Z",
+  "updated_at": "2026-04-08T20:58:07.301239Z",
+  "account": {
+    "uuid": "5d09915c-393e-444b-b3f2-a55536782902"
+  },
+  "chat_messages": [
+    {
+      "uuid": "019d6e69-28e0-7161-8456-cdde863d2ec2",
+      "text": "",
+      "content": [
+        {
+          "start_timestamp": "2026-04-08T18:44:41.330473Z",
+          "stop_timestamp": "2026-04-08T18:44:41.330473Z",
+          "flags": null,
+          "type": "text",
+          "text": "",
+          "citations": []
+        }
+      ],
+      "sender": "human",
+      "created_at": "2026-04-08T18:44:41.589037Z",
+      "updated_at": "2026-04-08T18:44:41.589037Z",
+      "attachments": [
+        {
+          "file_name": "",
+          "file_size": 10120,
+          "file_type": "txt",
+          "extracted_content": "# RESUMEN GLOBAL — Proyecto CTR Reclaim EA\n## Estado al: 08 de Abril 2026\n\n---\n\n## 1. QUÉ ES LA ESTRATEGIA\n\n**CTR Reclaim — Liquidity Sweep Reversal**\n\nLógica: El precio marca el HIGH/LOW de una \"key candle\" en la apertura de NY. Una barra posterior barre ese nivel (cierra fuera) y en la siguiente barra revierte cerrando de vuelta dentro. Se entra en la apertura de esa barra de reversión.\n\n**Reglas exactas (v3.7 producción):**\n- Key candle: barra M10 que abre a las **8:40 AM NY** (servidor FP verano: 15:40 GMT+3)\n- Señal SELL: barra barre HIGH de key candle y cierra por debajo\n- Señal BUY: barra barre LOW de key candle y cierra por encima\n- Entrada: apertura de la barra siguiente al sweep\n- Filtro de barras: solo barras 3 a 8 post-key candle (WindowMinBar=3, WindowMaxBar=8)\n- SL=100 ticks | TP=690 ticks | R:R=6.9x\n- BE: mover SL a entry+10 ticks cuando el trade avanza 350 ticks a favor\n- Máximo 1 trade por día | Lunes desactivado\n\n---\n\n## 2. VERSIÓN ACTUAL DE PRODUCCIÓN: v3.7\n\n**Archivo:** `CTR_Reclaim_v3_7.mq5` (en /mnt/user-data/outputs/)\n\n**Parámetros hardcodeados como defaults:**\n```\nSL_ticks           = 100\nTP_ticks           = 690     R:R = 6.9x\nWindowMinBar       = 3       (FIJO — regla estructural)\nWindowMaxBar       = 8\nEnableBreakeven    = true\nBE_TriggerTicks    = 350\nTradeMonday        = false   (desactivado — PF=0.516 OOS)\nTradeTuesday/Wed/Thu/Fri = true\nNY_Hour            = 8\nNY_Minute          = 40      (¡PENDIENTE ACTUALIZAR a 8:30!)\nMagicNumber        = 3700\nAccountLeverage    = 20      (FP real)\nRiskAmountUSD      = 100     (objetivo, limitado por margen)\nValuePerTickPerLot = 0.20    (empírico FP)\n```\n\n**Resultados validados:**\n| Período | Trades | PF | Net | DD |\n|---|---|---|---|---|\n| IS 2021-2023 ($28k) | 604 | 2.167 | +$4,828 | 0.98% |\n| OOS 2024-2026 ($100k) | 272 | 1.512 | +$2,302 | 0.82% |\n\n- Degradación IS→OOS: **-30.2%** (dentro del umbral aceptable)\n- OOS por año: 2024 PF=1.391 | 2025 PF=1.681 (mejorando)\n- OOS por día: Mar PF=1.125 | Mie PF=2.184★ | Jue PF=1.275 | Vie PF=1.523★\n\n---\n\n## 3. ORIGEN DE CADA PARÁMETRO\n\n| Parámetro | Origen | Detalle |\n|---|---|---|\n| SL=100 | OPT1 (292 combs, IS 2021-23) | 100% combs con SL=100 son positivas |\n| TP=690 | OPT1 | R:R=6.9x, zona óptima IS |\n| WindowMaxBar=8 | OPT1 | Zona óptima confirmada |\n| EnableBreakeven=true | OPT1 | Siempre superior a false en OPT1 |\n| BE_TriggerTicks=350 | OPT1 | Mejor PF promedio |\n| WindowMinBar=3 | Analítico | Bar1-2 WR=6-7% < BE WR=12.7% |\n| TradeMonday=false | Analítico | IS PF=2.175 → OOS PF=0.516, cambio de signo |\n| NY_Hour=8:40 | ⚠️ Sin validar | Lógica ICT, nunca optimizado estadísticamente |\n\n**#2 mejor configuración OPT1:** igual que ganador pero BE_TriggerTicks=450 (PF=2.052). Confirma robustez del parámetro.\n\n---\n\n## 4. WALK-FORWARD ANALYSIS (WFA) — HALLAZGO CRÍTICO\n\n**Archivos:** `CRT_V3_7_BR.xml` y `CRT_V3_7_FR.xml` (4,806 combinaciones cada uno)\n- Métrica: Balance Final (capital $5,000)\n- Parámetros optimizados: SL (25-500), TP (50-1000), NY_Hour (12-22), NY_Minute (0/15/30/45), BE (T/F), BE_TriggerTicks\n\n**MEJOR CONFIGURACIÓN WFA:**\n```\nSL_ticks    = 100\nTP_ticks    = 925      (+34% vs TP=690)\nR:R         = 9.25x    (vs 6.9x anterior)\nNY_Hour     = 15       (servidor) = 8:30 AM NY\nNY_Minute   = 30\nEnableBE    = false    (cambio respecto a v3.7)\nIS Balance  = $10,092  (+102% sobre $5k)\nOOS Balance = $6,609   (+32% sobre $5k)\nDD          = 1.49%\nTrades OOS  = 266\n```\n\n**Hallazgos WFA:**\n- Hora 15:30 servidor (8:30 AM NY): 90.1% de combinaciones rentables en OOS → **HORA ÓPTIMA CONFIRMADA**\n- SL=100 sigue siendo el mejor en WFA (también el top en OPT1)\n- TP=925 supera a TP=690 en OOS\n- BE=false produce mayor robustez OOS que BE=true\n- Horas >17:00 servidor: pocas combinaciones rentables en OOS\n\n**⚠️ PRÓXIMA ACCIÓN CRÍTICA:** Crear v3.8 con: `NY_Minute=30, NY_Hour=15 (8:30 AM NY), TP_ticks=925, EnableBreakeven=false`\n\n---\n\n## 5. ANÁLISIS DE RENDIMIENTO\n\n**Mecánica por cada 100 trades (OOS real):**\n- 16 trades llegan al TP → +$97 promedio c/u\n- 10 trades llegan al BE → +$0.60 promedio c/u\n- 74 trades golpean el SL → -$22 promedio c/u\n- **EV por trade: $8.46**\n\n**Por qué el riesgo real es $22 y no $100:**\n- FP cobra margen efectivo ~$92,131 por lot en NAS100\n- Con $100k capital: max_lots = 1.11 → riesgo real = $22/trade\n- Con $28k capital: max_lots = 0.27 → riesgo real = $5.40/trade\n- Para $100/trade real se necesita ~$450k capital o apalancamiento real 1:100\n\n**Esta estrategia es de INCOME, no de RETO:**\n- Genera ~12 trades/mes, EV=~$105/mes sobre $100k (0.1% mensual)\n- Para pasar un reto de 8% tardaría ~76 meses (6.4 años)\n\n---\n\n## 6. PROBLEMA CENTRAL — MARGEN DEL BROKER\n\nFP aplica ~92% del nocional como margen en NAS100 (efectivo ~1:5 a pesar de nominal 1:20):\n- Retry en EA no funciona porque el problema es estructural de capital\n- No es bug de código — es restricción del broker verificada empíricamente\n\n**Soluciones reales:**\n| Capital | Lots | Riesgo/trade |\n|---|---|---|\n| $28k (actual) | 0.27 | $5.40 |\n| $50k | 0.44 | $8.80 |\n| $100k | 1.11 | $22.28 |\n| ~$450k | 5.00 | $100.00 |\n\n---\n\n## 7. EMPRESAS DE FONDEO EVALUADAS\n\n### Descartadas:\n- **BrightFunded**: Anuncia 1:100 pero índices = 1:20 (igual que FP). Marketing engañoso.\n- **OFP Funding**: Sin profit target ✓, MT5 ✓, pero **EAs prohibidos** → descartada\n- **For Traders Instant**: Sin profit target ✓, pero índices 1:5 → descartada\n\n### Candidatas activas:\n| Firma | Profit Target | MT5 | EA | Apal. índices | Estado |\n|---|---|---|---|---|---|\n| **Alpine Funded** | ❌ Ninguno | ✓ | ✓ | 1:100 | ★ Mejor opción — verificar margen real |\n| **The5ers HG** | ❌ Ninguno | ✓ | ✓ | 1:30 | ✓ Sólida |\n| **The5ers HS** | ❌ Ninguno | ✓ | ✓ | 1:25 (fue 1:5 temporal) | Verificar si expiró reducción |\n\n**Plan de acción para empresas:**\n1. Abrir demo en Alpine Funded → correr `OrderCalcMargin()` para NAS100 → si margen/lot < $5,000 es la elección\n2. Si margen Alpine = FP → ir a The5ers Hyper Growth ($100k, 1:30)\n3. Empezar siempre con cuenta pequeña para validar que el EA ejecuta correctamente\n\n---\n\n## 8. ADAPTACIÓN A NUEVOS INSTRUMENTOS\n\n**Archivo prompt:** `CTR_Reclaim_Prompt_Nuevos_Instrumentos.md` (en /mnt/user-data/outputs/)\n\n**Candidatos en orden de prioridad:**\n1. **EURUSD** — Más prometedor: apalancamiento 1:100 FX, spread 1-3 ticks, $100/trade con solo $1,000-2,000 capital. Sin el problema de margen de NAS100.\n2. **XAUUSD** — Buena liquidez en NY, margen moderado, hora óptima puede diferir (evaluar 8:00-8:30 AM)\n3. **WTI** — Más arriesgado: EIA miércoles 10:30 AM distorsiona, spread amplio\n\n**Metodología obligatoria para cada instrumento:**\n- Paso 1: Análisis CSV antes de código (confirmar edge estadístico)\n- Paso 2: EA de análisis (exporta datos, no ejecuta)\n- Paso 3: OPT IS 2021-2023 con métrica PF\n- Paso 4: Validación OOS 2024-2026 sin tocar parámetros\n- Paso 5: Análisis por día OOS (no IS para evitar overfitting)\n\n---\n\n## 9. PENDIENTES CRÍTICOS\n\n### Inmediato:\n1. **Crear v3.8** con parámetros WFA: `NY_Hour=15, NY_Minute=30, TP=925, BE=false`\n2. **Correr backtest IS 2021-2023 v3.8** → confirmar impacto del cambio de hora y TP\n3. **Correr backtest OOS 2024-2026 v3.8** → comparar con v3.7 (PF=1.512, OOS=$2,302)\n\n### Próximo sprint:\n4. **Demo Alpine Funded** → verificar margen real NAS100 con `OrderCalcMargin()`\n5. **Probar LONG-only** en NAS100 (sesgo alcista del índice, nunca validado)\n6. **Walk-forward 3 splits** para validación robusta adicional\n7. **Iniciar adaptación EURUSD** usando el prompt maestro\n\n---\n\n## 10. ARCHIVOS CLAVE\n\n### En /mnt/user-data/outputs/:\n- `CTR_Reclaim_v3_7.mq5` — EA de producción actual\n- `CTR_Reclaim_Prompt_Nuevos_Instrumentos.md` — Prompt para XAUUSD/WTI/EURUSD\n\n### En /mnt/user-data/uploads/ (backtests más recientes):\n- `CTR_v37_NDX100_M10_3700.csv` — OOS 2024-2026 v3.7 (272 trades, PF=1.512)\n- `CTR_v37_RESUMEN_NDX100_3700.csv` — Resumen OOS v3.7\n- `CTR_v362_NDX100_M10_3620.csv` — OOS v3.6.2 (para referencia)\n- `CRT_V3_7_BR.xml` — Walk-Forward 4,806 combinaciones\n- `CRT_V3_7_FR.xml` — Walk-Forward 4,806 combinaciones (idéntico a BR)\n- `ReportOptimizer-11606849.xml` — OPT1 IS (292 combinaciones)\n\n---\n\n## 11. CONTEXTO TÉCNICO\n\n- **Plataforma:** MetaTrader 5 (MQL5)\n- **Broker/Prop Firm:** Funding Pips — demo, servidor GMT+3 verano / GMT+2 invierno\n- **Capital base backtests:** IS=$28,000 / OOS=$100,000\n- **Instrumento principal:** NDX100 (NAS100) M10\n- **EA features:** Fill mode auto-detección (FOK/IOC/RETURN), OrderCalcMargin() para margen real, CSV export con DD tracking, circuit breakers configurables, dashboard en pantalla\n- **Convención versiones:** `CTR_Reclaim_v{X.Y}.mq5` | MagicNumber=versión×100 (v3.7=3700)\n- **Timezone fórmula:** Servidor FP = NY_EDT + 4 + GMT_Offset (verano GMT_Offset=3 → servidor = NY+7, entonces NY 8:30 AM = servidor 15:30)\n\n---\n\n## 12. LECCIONES APRENDIDAS (no repetir)\n\n1. **Python string replacement en MQL5 es frágil** — siempre verificar con grep post-reemplazo\n2. **MT5 optimizer retiene últimos valores** — verificar parámetros activos antes de confiar en resultados\n3. **ValuePerTickPerLot siempre empírico** — no asumir, medir en el broker real\n4. **Análisis por días requiere >100 trades/día** — con menos es ruido estadístico\n5. **Lunes: IS estrella → OOS negativo** — cambio de signo = overfitting clásico\n6. **TradesFailed no se arregla con código** — es restricción de capital/margen estructural\n7. **BE=false puede ser más robusto OOS** — WFA confirmó que BE agrega poco valor real\n8. **La métrica de optimización importa** — OPT1 usó PF, WFA usó Balance Final; pueden dar resultados diferentes\n9. **BrightFunded \"1:100\"** — es marketing, los índices son 1:20 real\n10. **OFP prohíbe EAs** — a pesar de no tener profit target, incompatible con esta estrategia\n\n---\n\n*Resumen generado: 08 Abril 2026*\n*Próxima versión a desarrollar: CTR Reclaim v3.8 (NY=8:30 AM, TP=925, BE=false)*\n"
+        }
+      ],
+      "files": [
+        {
+          "file_uuid": "58e9a840-b653-4822-a72d-13b6f2b9d7a7",
+          "file_name": ""
+        }
+      ],
+      "parent_message_uuid": "00000000-0000-4000-8000-000000000000"
+    },
+    {
+      "uuid": "019d6e69-28e1-7aa1-8f84-88bc2885e02c",
+      "text": " Hola Jose. Tienes el resumen muy bien estructurado. El siguiente paso lógico es crear la **v3.8** con los parámetros del WFA.\n\nVoy a generar el archivo directamente. Déjame leer primero el código de v3.7 para hacer los cambios correctos.\n```\nThis block is not supported on your current device yet.\n```\n\n\n```\nThis block is not supported on your current device yet.\n```\n\nEl archivo v3.7 no está disponible en este contexto. Tengo dos opciones:\n\n**Opción A** — Escribo v3.8 desde cero basándome en las especificaciones del resumen (lógica completa documentada en la sección 1 y 11).\n\n**Opción B** — Me pegas el código de `CTR_Reclaim_v3_7.mq5` aquí y hago exactamente los 4 cambios del WFA sobre él.\n\nLos 4 cambios son quirúrgicos:\n| Parámetro | v3.7 | v3.8 |\n|---|---|---|\n| `NY_Hour` | 8 (= servidor 15, **pero NY_Minute=40**) | 8 → se actualiza a **8:30** |\n| `NY_Minute` | 40 | **30** |\n| `TP_ticks` | 690 | **925** |\n| `EnableBreakeven` | true | **false** |\n| `MagicNumber` | 3700 | **3800** |\n\n¿Cuál prefieres? Si tienes el .mq5 a mano, pégalo y lo aplico en 2 minutos sin riesgo de perder ninguna lógica existente.",
+      "content": [
+        {
+          "start_timestamp": "2026-04-08T18:44:42.520052Z",
+          "stop_timestamp": "2026-04-08T18:44:44.199759Z",
+          "flags": null,
+          "type": "text",
+          "text": " Hola Jose. Tienes el resumen muy bien estructurado. El siguiente paso lógico es crear la **v3.8** con los parámetros del WFA.\n\nVoy a generar el archivo directamente. Déjame leer primero el código de v3.7 para hacer los cambios correctos.",
+          "citations": []
+        },
+        {
+          "start_timestamp": "2026-04-08T18:44:44.619940Z",
+          "stop_timestamp": "2026-04-08T18:44:45.905710Z",
+          "flags": null,
+          "type": "tool_use",
+          "id": "toolu_01Y6xRAhMkHo2NHDrS1Pn7Pb",
+          "name": "bash_tool",
+          "input": {
+            "command": "ls /mnt/user-data/outputs/CTR_Reclaim_v3_7.mq5 2>/dev/null && echo \"EXISTS\" || echo \"NOT FOUND\"\nls /mnt/user-data/uploads/ | grep -i ctr",
+            "description": "Check if v3.7 file exists in outputs"
+          },
+          "message": "Check if v3.7 file exists in outputs",
+          "integration_name": null,
+          "integration_icon_url": null,
+          "icon_name": "commandLine",
+          "context": null,
+          "display_content": {
+            "type": "json_block",
+            "json_block": "{\"language\": \"bash\", \"code\": \"ls /mnt/user-data/outputs/CTR_Reclaim_v3_7.mq5 2>/dev/null && echo \\\"EXISTS\\\" || echo \\\"NOT FOUND\\\"\\nls /mnt/user-data/uploads/ | grep -i ctr\"}"
+          },
+          "approval_options": null,
+          "approval_key": null,
+          "is_mcp_app": null,
+          "mcp_server_url": null
+        },
+        {
+          "start_timestamp": null,
+          "stop_timestamp": null,
+          "flags": null,
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Y6xRAhMkHo2NHDrS1Pn7Pb",
+          "name": "bash_tool",
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"returncode\":1,\"stdout\":\"NOT FOUND\\n\",\"stderr\":\"\"}",
+              "uuid": "4178d46b-fd07-44ed-9e68-c51c59be5e37"
+            }
+          ],
+          "is_error": false,
+          "structured_content": null,
+          "meta": null,
+          "message": null,
+          "integration_name": null,
+          "mcp_server_url": null,
+          "integration_icon_url": null,
+          "icon_name": "commandLine",
+          "display_content": {
+            "type": "json_block",
+            "json_block": "{\"language\": \"plaintext\", \"code\": \"NOT FOUND\\n\"}"
+          }
+        },
+        {
+          "start_timestamp": "2026-04-08T18:44:53.324473Z",
+          "stop_timestamp": "2026-04-08T18:44:53.872947Z",
+          "flags": null,
+          "type": "tool_use",
+          "id": "toolu_01EuKARfR7UFFXedYWtLLR5X",
+          "name": "bash_tool",
+          "input": {
+            "command": "ls /mnt/user-data/outputs/ 2>/dev/null; echo \"---\"; ls /mnt/user-data/uploads/ 2>/dev/null",
+            "description": "List all available files"
+          },
+          "message": "List all available files",
+          "integration_name": null,
+          "integration_icon_url": null,
+          "icon_name": "commandLine",
+          "context": null,
+          "display_content": {
+            "type": "json_block",
+            "json_block": "{\"language\": \"bash\", \"code\": \"ls /mnt/user-data/outputs/ 2>/dev/null; echo \\\"---\\\"; ls /mnt/user-data/uploads/ 2>/dev/null\"}"
+          },
+          "approval_options": null,
+          "approval_key": null,
+          "is_mcp_app": null,
+          "mcp_server_url": null
+        },
+        {
+          "start_timestamp": null,
+          "stop_timestamp": null,
+          "flags": null,
+          "type": "tool_result",
+          "tool_use_id": "toolu_01EuKARfR7UFFXedYWtLLR5X",
+          "name": "bash_tool",
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"returncode\":0,\"stdout\":\"---\\n\",\"stderr\":\"\"}",
+              "uuid": "9ccbc228-b7b0-4020-9c6d-9cc10a29a889"
+            }
+          ],
+          "is_error": false,
+          "structured_content": null,
+          "meta": null,
+          "message": null,
+          "integration_name": null,
+          "mcp_server_url": null,
+          "integration_icon_url": null,
+          "icon_name": "commandLine",
+          "display_content": {
+            "type": "json_block",
+            "json_block": "{\"returncode\":0,\"stdout\":\"---\\n\",\"stderr\":\"\"}"
+          }
+        },
+        {
+          "start_timestamp": "2026-04-08T18:44:55.540217Z",
+          "stop_timestamp": "2026-04-08T18:45:01.721916Z",
+          "flags": null,
+          "type": "text",
+          "text": "El archivo v3.7 no está disponible en este contexto. Tengo dos opciones:\n\n**Opción A** — Escribo v3.8 desde cero basándome en las especificaciones del resumen (lógica completa documentada en la sección 1 y 11).\n\n**Opción B** — Me pegas el código de `CTR_Reclaim_v3_7.mq5` aquí y hago exactamente los 4 cambios del WFA sobre él.\n\nLos 4 cambios son quirúrgicos:\n| Parámetro | v3.7 | v3.8 |\n|---|---|---|\n| `NY_Hour` | 8 (= servidor 15, **pero NY_Minute=40**) | 8 → se actualiza a **8:30** |\n| `NY_Minute` | 40 | **30** |\n| `TP_ticks` | 690 | **925** |\n| `EnableBreakeven` | true | **false** |\n| `MagicNumber` | 3700 | **3800** |\n\n¿Cuál prefieres? Si tienes el .mq5 a mano, pégalo y lo aplico en 2 minutos sin riesgo de perder ninguna lógica existente.",
+          "citations": []
+        }
+      ],
+      "sender": "assistant",
+      "created_at": "2026-04-08T18:45:01.761191Z",
+      "updated_at": "2026-04-08T18:45:01.761191Z",
+      "attachments": [],
+      "files": [],
+      "parent_message_uuid": "019d6e69-28e0-7161-8456-cdde863d2ec2"
+    }
+  ]
+}

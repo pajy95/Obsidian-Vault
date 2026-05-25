@@ -1,0 +1,63 @@
+; ============================================================
+; SET FILE — TBR v1.0b | XAUUSD M5 | P1
+; Veredicto: VIABLE IS/OOS | WFA 2026 pendiente (regimen hostil)
+; Pass: #7129 | Candles=3 | Min=45 | RR=3.6 | Long+Short
+; Validado: 2026-05-11 | Broker: FundingPips
+; CRITICO: SessionStart_Hour=14 UTC = 16:45 server (UTC+2)
+; ============================================================
+
+; === MODO DE ESTRATEGIA ===
+TradeDirection=0
+EntryMode=1
+
+; === SESION HORARIA ===
+RangeCandlesCount=3
+SessionStart_Hour=14
+SessionStart_Min=45
+SessionEnd_Hour=18
+SessionEnd_Min=0
+ServerOffsetHours=2
+
+; === FILTROS ===
+SpreadFilter_Enable=false
+MaxSpread=20
+
+; === FILTRO DE GAP ===
+GapFilter_Enable=false
+MaxGapPct=0.5
+
+; === GESTION DE POSICION ABIERTA ===
+CloseAfterHours_Enable=true
+MaxHoldHours=4
+
+; === STOP LOSS Y TAKE PROFIT ===
+SL_AtRangeExtreme=true
+RR=3.6
+StopLevel_ExtraPoints=10
+
+; === BREAKEVEN ===
+UseBreakeven=false
+BE_TriggerRR=1.0
+BE_BufferPct=2.0
+
+; === RIESGO ===
+RiskAmountUSD=12.5
+
+; === DIAS DE TRADING ===
+TradeSunday=false
+TradeMonday=true
+TradeTuesday=true
+TradeWednesday=true
+TradeThursday=true
+TradeFriday=true
+TradeSaturday=false
+
+; === LOGGING ===
+EnableCSV=true
+EnableLog=true
+
+; === VISUALES ===
+VIS_Enable=true
+
+; === CONFIG ===
+MagicNumber=202502

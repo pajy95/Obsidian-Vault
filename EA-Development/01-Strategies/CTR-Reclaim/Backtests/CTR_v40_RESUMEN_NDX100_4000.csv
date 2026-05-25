@@ -1,0 +1,50 @@
+CTR Reclaim v4.0 — Resumen Backtest
+Simbolo,NDX100
+Balance inicial,$5000.00
+Balance final,$5088.82
+Profit neto,$88.82
+Total operaciones,223
+Ganadas,52
+Perdidas,171
+Win Rate,23.32%
+Profit Factor,1.1319
+Ganancia bruta,$761.99
+Perdida bruta,$-673.17
+Max DD,$84.18
+RR implícito,1:3.00
+BE Win Rate,25.00%
+Edge WR-BE,-1.68%
+MultiplSL,0.30
+MultiplTP,0.90
+RangoMinimoPoints,30.0
+RangoMaximoPoints,500.0
+RiesgoUSD,$50.00
+ValorPorPuntoLot,$20.00
+ApalancamientoCuenta,1:20
+VentanaBarraMin,3
+VentanaBarraMax,8
+OperarLunes,si
+ActivarBreakeven,no
+BE_FraccionTP,0.50
+MaxSpreadPuntos,300
+FiltradosPorVentanaMin,154
+FiltradosPorSpread,0
+FiltradosPorRangoMin,64141
+FiltradosPorRangoMax,0
+KeyCandlesEncontradas,304
+SweepsDetectados,381
+SeñalesActivadas,381
+IntentosTrading,223
+FallosTrading,0
+
+=== ANÁLISIS BARRAS DESDE KEY ===
+Barra,Operaciones,Ganadas,WR_pct,WR_minima
+Barra 3,75,15,20.0%,25.0% DEBIL
+Barra 4,26,5,19.2%,25.0% DEBIL
+Barra 5,32,10,31.2%,25.0% FUERTE
+Barra 6,61,16,26.2%,25.0%
+Barra 7,23,4,17.4%,25.0% DEBIL
+Barra 8,6,2,33.3%,25.0% FUERTE
+
+=== TRADES ===
+Ver archivo: CTR_v40_NDX100_M10_4000.csv

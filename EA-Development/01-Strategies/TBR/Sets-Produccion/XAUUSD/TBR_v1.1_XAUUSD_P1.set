@@ -1,0 +1,81 @@
+; ============================================================
+; SET FILE — TBR v1.1 | XAUUSD M5 | P1
+; Veredicto: VIABLE IS/OOS | Demo condicional (esperar Q3 2026)
+; Pass: #7129 | Candles=3 | Min=45 | RR=3.6 | Long+Short
+; Validado: 2026-05-11 | Broker: FundingPips
+; CRITICO: TradeDirection=0 (DIR_BOTH = Long + Short)
+; CRITICO: SessionStart_Hour=14 UTC = 16:45 server (UTC+2)
+; ============================================================
+
+; === MODO DE ESTRATEGIA ===
+; TradeDirection: 0=AMBAS | 1=SOLO COMPRA | 2=SOLO VENTA
+TradeDirection=0
+; EntryMode: 0=CONFIRMACION (market order en cierre de vela) | 1=PENDIENTE (stop order en extremo del rango)
+EntryMode=1
+
+; === SESION HORARIA ===
+RangeCandlesCount=3
+SessionStart_Hour=14
+SessionStart_Min=45
+SessionEnd_Hour=18
+SessionEnd_Min=0
+ServerOffsetHours=2
+
+; === FILTRO DE SPREAD ===
+SpreadFilter_Enable=false
+MaxSpread=20
+
+; === FILTRO DE GAP ===
+GapFilter_Enable=false
+MaxGapPct=0.5
+
+; === FILTRO DE RANGO (v1.1 — DESACTIVADO) ===
+RangeFilter_Enable=false
+RangeFilter_MinPts=10
+RangeFilter_MaxPts=200
+
+; === FILTRO ATR DIARIO (v1.1 — DESACTIVADO) ===
+ATRFilter_Enable=false
+ATRFilter_Period=14
+ATRFilter_MinMult=0.3
+ATRFilter_MaxMult=2.0
+
+; === VENTANA DE ENTRADA (v1.1 — DESACTIVADO) ===
+EntryWindow_Enable=false
+EntryWindow_MaxMin=60
+
+; === GESTION DE POSICION ABIERTA ===
+CloseAfterHours_Enable=true
+MaxHoldHours=4
+
+; === STOP LOSS Y TAKE PROFIT ===
+SL_AtRangeExtreme=true
+RR=3.6
+StopLevel_ExtraPoints=10
+
+; === BREAKEVEN ===
+UseBreakeven=false
+BE_TriggerRR=1.0
+BE_BufferPct=2.0
+
+; === RIESGO ===
+RiskAmountUSD=12.5
+
+; === DIAS DE TRADING ===
+TradeSunday=false
+TradeMonday=true
+TradeTuesday=true
+TradeWednesday=true
+TradeThursday=true
+TradeFriday=true
+TradeSaturday=false
+
+; === LOGGING ===
+EnableCSV=true
+EnableLog=true
+
+; === VISUALES ===
+VIS_Enable=true
+
+; === CONFIG ===
+MagicNumber=202502
