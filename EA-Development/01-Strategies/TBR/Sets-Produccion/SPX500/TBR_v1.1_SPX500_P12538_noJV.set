@@ -1,0 +1,80 @@
+; ============================================================
+; SET FILE — TBR v1.1 | SPX500 M5 | P12538 sin Jue+Vie
+; Veredicto: VIABLE 13/13 IS/OOS/WFA
+; Pass: P12538 | Candles=1 | Min=20 | RR=4.5 | BE=0.20 | Hold=3h | BUY | sin Jue+Vie
+; Validado: 2026-05-25 | Broker: FundingPips
+; CRITICO: UseBreakeven=true (BE activo en optimizacion — verificado)
+; CRITICO: TradeThursday=false / TradeFriday=false (Jue colapsa WFA PF=0.041)
+; CRITICO: SessionEnd=17:00 srv (igual que P187 — no 18:00)
+; CRITICO: SessionStart=14:20 srv (5 min despues de P187 14:15)
+; PENDIENTE: verificar correlacion con P187 antes de activar en misma cuenta
+; ============================================================
+
+; === MODO DE ESTRATEGIA ===
+; TradeDirection: 0=AMBAS | 1=SOLO COMPRA | 2=SOLO VENTA
+TradeDirection=1
+; EntryMode: 0=CONFIRMACION (market order en cierre de vela) | 1=PENDIENTE (stop order en extremo del rango)
+EntryMode=1
+
+; === SESION HORARIA ===
+RangeCandlesCount=1
+SessionStart_Hour=14
+SessionStart_Min=20
+SessionEnd_Hour=17
+SessionEnd_Min=0
+ServerOffsetHours=2
+
+; === FILTROS ===
+SpreadFilter_Enable=false
+MaxSpread=20
+
+; === FILTRO DE GAP ===
+GapFilter_Enable=false
+MaxGapPct=0.5
+
+; === FILTROS v1.1 (desactivados) ===
+RangeFilter_Enable=false
+RangeFilter_MinPts=10
+RangeFilter_MaxPts=200
+ATRFilter_Enable=false
+ATRFilter_Period=14
+ATRFilter_MinMult=0.3
+ATRFilter_MaxMult=2.0
+EntryWindow_Enable=false
+EntryWindow_MaxMin=60
+
+; === GESTION DE POSICION ABIERTA ===
+CloseAfterHours_Enable=true
+MaxHoldHours=3
+
+; === STOP LOSS Y TAKE PROFIT ===
+SL_AtRangeExtreme=true
+RR=4.5
+StopLevel_ExtraPoints=10
+
+; === BREAKEVEN ===
+UseBreakeven=true
+BE_TriggerRR=0.20
+BE_BufferPct=2.0
+
+; === RIESGO ===
+RiskAmountUSD=12.5
+
+; === DIAS DE TRADING ===
+TradeSunday=false
+TradeMonday=true
+TradeTuesday=true
+TradeWednesday=true
+TradeThursday=false
+TradeFriday=false
+TradeSaturday=false
+
+; === LOGGING ===
+EnableCSV=true
+EnableLog=true
+
+; === VISUALES ===
+VIS_Enable=true
+
+; === CONFIG ===
+MagicNumber=202513

@@ -1,7 +1,7 @@
 ---
 type: magic-number-registry
 strategy: TBR
-updated: 2026-05-23
+updated: 2026-05-25
 ---
 
 # Control de Magic Numbers — TBR v1.1
@@ -37,8 +37,11 @@ Registro central de Magic Numbers para todos los sets activos del EA TBR.
 | **202508** | USDJPY | P5458 | 1 BUY | 2.5 | 6 | 02:35 | ⏳ Demo — VIABLE 10/10 (activar) | `Optimizacion/USDJPY/Sets/TBR_USDJPY_P5458.set` |
 | **202509** | GBPJPY | P121378 | 1 BUY | 3.0 | 6 | 09:00 | ⏳ Pendiente demo | `Optimizacion/GBPJPY/Sets/TBR_GBPJPY_P121378.set` |
 | **202510** | GBPJPY | P110836 | 1 BUY | 2.5 | 6 | 08:55 | ⏳ Pendiente demo | `Optimizacion/GBPJPY/Sets/TBR_GBPJPY_P110836.set` |
+| **202511** | — | RBR (reservado) | — | — | — | — | ⏳ EA pendiente codificación | — |
+| **202512** | DJI30 | P11944 | 1 BUY | 4.5 | 1 | 14:25 | ✅ EN CUENTA (live) 2026-05-25 | `Sets-Produccion/DJI30/TBR_v1.1_DJI30_P11944.set` |
+| **202513** | SPX500 | P12538 noJV | 1 BUY | 4.5 | 1 | 14:20 | ⏳ Pendiente demo — VIABLE 13/13 (corr=0.661 con P187, misma cuenta reducir risk) | `Sets-Produccion/SPX500/TBR_v1.1_SPX500_P12538_noJV.set` |
 
-**Próximo disponible: 202511**
+**Próximo disponible: 202514**
 
 ---
 
@@ -61,10 +64,15 @@ Registro central de Magic Numbers para todos los sets activos del EA TBR.
 - **202507 (P7389):** MARGINAL 9/10 — WFA negativo (0.970). En espera. Re-evaluar Q3 2026 o backtest BUY-only con sus parámetros.
 
 ### GBPJPY
-- **202509 (P121378):** primera meseta 09:00. PF OOS=1.744, WFA=0.918 (negativo 2026).
-- **202510 (P110836):** segunda meseta 08:55. PF OOS=1.759, WFA=1.333 (positivo 2026).
-- Ambas mantenidas para variar portafolios. Timing casi idéntico (5 min) — correlación probablemente alta.
-- P110836 es el pass superior en WFA y DD — usar como primario.
+- **202509 (P121378):** primera meseta 09:00. PF OOS=1.744, WFA=0.918 (negativo 2026). Archivado — correlación 0.89 con P110836.
+- **202510 (P110836):** segunda meseta 08:55. PF OOS=1.759, WFA=1.333 (positivo 2026). Pass primario.
+
+### SPX500
+- **202505 (P187 noJV):** LIVE. BUY, Min=15, Range=2, RR=3.5, UseBreakeven=false, sin Jue+Vie.
+- **202513 (P12538 noJV):** VIABLE 13/13. BUY, Min=20, Range=1, RR=4.5, UseBreakeven=true, BE=0.20, Hold=3h, sin Jue+Vie. Correlación 0.661 con P187. Activar en cuenta separada o reducir risk a $8-9 si misma cuenta.
+
+### EURUSD
+- P269914 DESCARTADO (7/12 pipeline — Perm OOS p=0.27, MC OOS P(profit)=72.6%). No hay edge robusto en Hr=11-15srv con IS=2022-2024.
 
 ---
 
